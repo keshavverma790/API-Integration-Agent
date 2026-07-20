@@ -1,6 +1,6 @@
-def main():
-    print("Hello from api-integration-agent!")
+from fastapi import FastAPI
+from api.health import router as health_router
 
+app = FastAPI()
 
-if __name__ == "__main__":
-    main()
+app.include_router(health_router)
