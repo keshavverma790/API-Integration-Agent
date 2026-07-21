@@ -12,7 +12,7 @@ engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(
     bind=engine,
-    autoflush=False,
+    expire_on_commit=False,
     autocommit=False
 )
 
@@ -20,3 +20,10 @@ metadata = MetaData(schema="agent_db_schema")
 
 class Base(DeclarativeBase):
     metadata = metadata
+    
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

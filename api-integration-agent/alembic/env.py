@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 import os
 
 from db.database import Base
-from model.conversation import Conversation
+from models.conversation import Conversation
+from models.message import Message
 
 load_dotenv()
 
