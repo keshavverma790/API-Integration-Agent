@@ -22,12 +22,14 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
     
+# Use the same environment-provided database URL for Alembic and the app.
 config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+# Alembic compares migrations against metadata that includes every imported model.
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -48,6 +50,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+    # Emit SQL without opening a database connection.
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -69,6 +72,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    # Create a temporary migration engine; NullPool avoids retaining connections.
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -76,6 +80,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
+        # Version history is stored in the same application schema as the tables.
         context.configure(
             connection=connection, target_metadata=target_metadata,
             include_schemas=True,
