@@ -10,6 +10,8 @@ import os
 from db.database import Base
 from models.conversation import Conversation
 from models.message import Message
+from models.document import Document
+from models.conversation_document import ConversationDocument
 
 load_dotenv()
 

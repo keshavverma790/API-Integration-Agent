@@ -5,6 +5,7 @@ from db.database import get_db
 from sqlalchemy.orm import Session
 
 from schemas.send_message_request import SendMesssageRequest
+from schemas.create_conversation_request import CreateConversationRequest
 
 router = APIRouter()
 
@@ -12,9 +13,9 @@ router = APIRouter()
 conversation_service = ConversationService()
 
 @router.post("/create")
-def create_conversation(db: Session = Depends(get_db)):
+def create_conversation(request: CreateConversationRequest, db: Session = Depends(get_db)):
     """Create a conversation using the request-scoped database session."""
-    conversation = conversation_service.create_conversation(db)
+    conversation = conversation_service.create_conversation(request, db)
     return {"message": "Conversation created successfully.", "status_code": 201, "conversation": conversation.id}
 
 @router.post("/message")

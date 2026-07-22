@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import DateTime, UUID, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 import uuid
 
 from db.database import Base
@@ -28,4 +28,11 @@ class Conversation(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+    
+    # Association records provide the conversation-to-document many-to-many link.
+    documents = relationship(
+        "ConversationDocument",
+        back_populates="conversation",
+        cascade="all, delete-orphan"
     )
